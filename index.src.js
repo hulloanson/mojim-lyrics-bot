@@ -1,6 +1,8 @@
 const fetch = require('node-fetch')
 const { parse, } = require('node-html-parser')
 const cheerio = require('cheerio')
+const turndown =require('turndown')
+const TurndownService=require('turndown')
 
 const parseLinkFromResultNode = (node) => {
   const lyricsPointer = node.querySelector('.mxsh_ss3')
@@ -34,8 +36,9 @@ const getFirstLinkFromResults = (rawHtml) => {
 
 const parseLyrics = (rawHtml) => {
   const $ = cheerio.load(rawHtml, {decodeEntities: false,})
-  const root = parse($('#fsZx3').html())
-  console.log(root.structuredText)
+  // const root = 
+  // console.log(root.structuredText)
+  console.log((new TurndownService()).turndown($('#fsZx3').html()))
 
   // const textarea = $
   
