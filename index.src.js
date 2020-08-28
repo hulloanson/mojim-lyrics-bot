@@ -1,8 +1,7 @@
 const fetch = require('node-fetch')
-const { parse, } = require('node-html-parser')
+// const { parse, } = require('node-html-parser')
 const cheerio = require('cheerio')
-const turndown =require('turndown')
-const TurndownService=require('turndown')
+const TurndownService = require('turndown')
 
 const parseLinkFromResultNode = (node) => {
   const lyricsPointer = node.querySelector('.mxsh_ss3')
@@ -19,23 +18,35 @@ const parseLinkFromResultNode = (node) => {
 
 const findFirstResult = (resultContainer) => {
   return resultContainer.childNodes &&
-  resultContainer.childNodes.find(n => 
-    n.classNames && n.classNames.find(
-      cn => cn.match(/mxsh_dd(1|2)/))
+    resultContainer.childNodes.find(n =>
+      n.classNames && n.classNames.find(
+        cn => cn.match(/mxsh_dd(1|2)/))
     )
 }
 
 const getFirstLinkFromResults = (rawHtml) => {
-  const root = parse(rawHtml)
-  const resultContainer = root.querySelector('.mxsh_dl0')
-  const firstRes = findFirstResult(resultContainer)
+  const $ = cheerio.load(rawHtml)
+  const oddRes = $('.mxsh_dd1')
+  const evenRes = $('.mxsh_dd2')
+  const len = Math.max(oddRes.length, evenRes.length)
+  let res = []
+  for (let i = 0; i < len; i++) {
+    res[2*i] = oddRes[i]
+    res[2*i + 1] = evenRes[i]
+  }
+  console.log(res)
+  throw new Error('exit')
+  console.log('==============oddRes======================')
+  console.log(Array.from(oddRes))
+  console.log('==============evenRes======================')
+  console.log(Array.from(evenRes))
   return parseLinkFromResultNode(firstRes)
   // if (!childNodes || childNodes.length === 0) return null
   // return parseResult(childNodes[0])
 }
 
 const parseLyrics = (rawHtml) => {
-  const $ = cheerio.load(rawHtml, {decodeEntities: false,})
+  const $ = cheerio.load(rawHtml, { decodeEntities: false, })
   const lyricsMarkdown = (new TurndownService()).turndown($('#fsZx3').html())
   return lyricsMarkdown
 }
@@ -48,7 +59,8 @@ const removeEmptyLines = (str) => {
 }
 
 const parseId = (href) => {
-  return Array.from(href.matchAll(/[0-9]{6}x[0-9]{2}x[0-9]/))[0][0]
+  const matches = Array.from(href.matchAll(/[0-9]{6}x[0-9]{2}x[0-9]/))
+  return matches && matches[0] && matches[0][0]
 }
 
 const genSongLink = (id) => `http://mojim.com/twy${id}.htm`
@@ -74,4 +86,4 @@ const search = (text) => {
     })
 }
 
-search('缺口 庾澄慶')
+search('晚期拖延症患者')
