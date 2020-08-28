@@ -36,27 +36,15 @@ const getFirstLinkFromResults = (rawHtml) => {
 
 const parseLyrics = (rawHtml) => {
   const $ = cheerio.load(rawHtml, {decodeEntities: false,})
-  // const root = 
-  // console.log(root.structuredText)
-  console.log((new TurndownService()).turndown($('#fsZx3').html()))
+  const lyricsMarkdown = (new TurndownService()).turndown($('#fsZx3').html())
+  return lyricsMarkdown
+}
 
-  // const textarea = $
-  
-  // console.log(Array.from(rawHtml.matchAll(/fsZx3/)))
-  // return
-  // const root = parse(rawHtml)
-  // console.log('=============lyrics root============')
-  // console.log(root)
-  // // const lyricsContainer = root.querySelector('.fsZx3')
-  // const lyricsContainer = root.querySelector('#fsZ')
-  // console.log('============lyrics container==========')
-  // console.log(lyricsContainer)
-  // console.log('============filtered lyrics container==========')
-  // console.log(lyricsContainer.map(lc => lc.classNames.find(cn => cn.match(/fsZx3/))))
-  // console.log(lyricsContainer)
-  // const text = lyricsContainer.structuredText()
-  // console.log('===========should be lyrics===============')
-  // console.log(text)
+const removeTimeStampedLyrics = (str) => {
+  return str.replace(/\\\[.*\\\].*\n/g, '')
+}
+const removeEmptyLines = (str) => {
+  return str.replace(/\n\s*\n/g, '\n\n')
 }
 
 const parseId = (href) => {
@@ -78,6 +66,9 @@ const search = (text) => {
     .then(link => fetch(link))
     .then(res => res.text())
     .then(parseLyrics)
+    .then(removeTimeStampedLyrics)
+    .then(removeEmptyLines)
+    .then(res => console.log(res))
     .catch(err => {
       console.log('======err=======\n', err)
     })
