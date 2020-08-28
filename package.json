@@ -1,0 +1,20 @@
+{
+  "name": "mojim-lyrics-bot",
+  "version": "1.0.0",
+  "main": "./index.js",
+  "scripts": {
+    "build": "babel index.src.js -o index.js",
+    "deploy": "gcloud functions deploy generateSpeech --entry-point getSpeech --runtime nodejs10 --trigger-http --allow-unauthenticated --project learn-mein-lang --env-vars-file=envvars.yaml --region asia-east2"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.4.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
+}
