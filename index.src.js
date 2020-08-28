@@ -1,5 +1,6 @@
 const fetch = require('node-fetch')
-const { parse } = require('node-html-parser')
+const { parse, } = require('node-html-parser')
+const cheerio = require('cheerio')
 
 const parseLinkFromResultNode = (node) => {
   const lyricsPointer = node.querySelector('.mxsh_ss3')
@@ -32,15 +33,27 @@ const getFirstLinkFromResults = (rawHtml) => {
 }
 
 const parseLyrics = (rawHtml) => {
-  const root = parse(rawHtml)
-  console.log('=============lyrics root============')
-  console.log(root)
-  const lyricsContainer = root.querySelector('.fsZx3')
-  console.log('============lyrics container==========')
-  console.log(lyricsContainer)
-  const text = lyricsContainer.structuredText()
-  console.log('===========should be lyrics===============')
-  console.log(text)
+  const $ = cheerio.load(rawHtml, {decodeEntities: false,})
+  const root = parse($('#fsZx3').html())
+  console.log(root.structuredText)
+
+  // const textarea = $
+  
+  // console.log(Array.from(rawHtml.matchAll(/fsZx3/)))
+  // return
+  // const root = parse(rawHtml)
+  // console.log('=============lyrics root============')
+  // console.log(root)
+  // // const lyricsContainer = root.querySelector('.fsZx3')
+  // const lyricsContainer = root.querySelector('#fsZ')
+  // console.log('============lyrics container==========')
+  // console.log(lyricsContainer)
+  // console.log('============filtered lyrics container==========')
+  // console.log(lyricsContainer.map(lc => lc.classNames.find(cn => cn.match(/fsZx3/))))
+  // console.log(lyricsContainer)
+  // const text = lyricsContainer.structuredText()
+  // console.log('===========should be lyrics===============')
+  // console.log(text)
 }
 
 const parseId = (href) => {
@@ -67,4 +80,4 @@ const search = (text) => {
     })
 }
 
-search("缺口 庾澄慶")
+search('缺口 庾澄慶')
