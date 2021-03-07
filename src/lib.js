@@ -1,6 +1,6 @@
-const fetch = require('node-fetch')
-const cheerio = require('cheerio')
-const TurndownService = require('turndown')
+import fetch from 'node-fetch'
+import cheerio from 'cheerio'
+import TurndownService from 'turndown'
 
 const getFirstLinkFromResults = (rawHtml) => {
   const $ = cheerio.load(rawHtml)
@@ -39,7 +39,7 @@ const parseId = (href) => {
 
 const genSongLink = (id) => `http://mojim.com/twy${id}.htm`
 
-const search = (text) => {
+export const search = (text) => {
   const uriEncoded = encodeURI(text)
   const searchUrl = `http://mojim.com/${uriEncoded}.html`
   fetch(searchUrl)
@@ -59,5 +59,3 @@ const search = (text) => {
       console.log('======err=======\n', err)
     })
 }
-
-search('想你的夜')

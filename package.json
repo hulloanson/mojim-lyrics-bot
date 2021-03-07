@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "main": "./index.js",
   "scripts": {
-    "build": "babel index.src.js -o index.js",
-    "deploy": "gcloud functions deploy generateSpeech --entry-point getSpeech --runtime nodejs10 --trigger-http --allow-unauthenticated --project learn-mein-lang --env-vars-file=envvars.yaml --region asia-east2"
+    "build": "babel index.src.js -o index.js lib.src.js -o lib.js"
   },
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.4.0"
+    "babel-loader": "^8.1.0",
+    "eslint": "^7.4.0",
+    "source-map-loader": "^1.1.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
